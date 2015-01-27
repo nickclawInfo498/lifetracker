@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public class MainActivity extends Activity {
     private static Button removeButton;
     private static Button addButton;
     private static ArrayAdapter<Player> adapter;
+    private static TextView alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class MainActivity extends Activity {
         ListView list = (ListView) findViewById(R.id.listView);
         removeButton = (Button) findViewById(R.id.removeButton);
         addButton = (Button) findViewById(R.id.addButton);
+        alert = (TextView) findViewById(R.id.alertView);
 
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +51,9 @@ public class MainActivity extends Activity {
         if (savedInstanceState != null && savedInstanceState.containsKey("players")) {
             ArrayList<Integer> players = savedInstanceState.getIntegerArrayList("players");
             for(int i = 0; i < players.size(); i++) {
-                adapter.add(new Player("Player " + (i + 1), players.get(i)));
+                Player player = new Player("Player " + (i + 1), players.get(i));
+                player.setOnDeathListener(deathListener);
+                adapter.add(player);
                 updateButtons();
             }
         } else {
@@ -60,11 +65,6 @@ public class MainActivity extends Activity {
 
         list.setAdapter(adapter);
 
-//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView view, View v, int i, long l) {
-//                Log.i("lifetracker", view.toString());
-//            }
-//        });
     }
 
     public void onSaveInstanceState(Bundle state) {
@@ -76,7 +76,9 @@ public class MainActivity extends Activity {
     }
 
     public void newPlayer() {
-        adapter.add(new Player("Player " + (adapter.getCount() + 1)));
+        Player player = new Player("Player " + (adapter.getCount() + 1));
+        player.setOnDeathListener(deathListener);
+        adapter.add(player);
         updateButtons();
     }
 
@@ -97,4 +99,10 @@ public class MainActivity extends Activity {
             addButton.setEnabled(true);
         }
     }
+
+    private static Player.DeathListener deathListener = new Player.DeathListener() {
+        public void onDeath(Player p) {
+            alert.setText(p.getName() + " LOSES");
+        }
+    };
 }

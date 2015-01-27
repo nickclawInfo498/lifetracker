@@ -29,9 +29,17 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:layout_weight="0.78"
+        android:layout_weight="1"
         android:divider="#a4ffffff"
         android:dividerHeight="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/alertView"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight=".01" />
 </LinearLayout>
